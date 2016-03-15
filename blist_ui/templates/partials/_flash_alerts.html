@@ -1,0 +1,9 @@
+{% if messages %}
+<div style="display: block; padding: 5px"><div class="uk-notify-message uk-notify-message-danger" style="opacity: 1; margin-top: 0px; margin-bottom: 10px;">
+{% for message in messages %}
+<div>
+ {{ message | safe }}
+</div>
+{% endfor %}
+</div></div>
+{% endif %}
