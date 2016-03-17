@@ -19,12 +19,7 @@ class Status(models.Model):
                                     verbose_name="Inserted By",
                                     related_name="State_inserted_by"
                                     )
-    user = models.ForeignKey(
-                             User,
-                             null=True,
-                             verbose_name="Updated By",
-                             related_name="EntityStates_updated_by"
-                                    )
+
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
      
@@ -46,7 +41,7 @@ class Bucketlist((models.Model)):
                                    )
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey(User, related_name="buckets")
+    user = models.ForeignKey(User, related_name="users")
 
     def __unicode__(self):
         return "Bucketlist: %s user: %s" % (self.name, self.user)
@@ -73,7 +68,7 @@ class BucketlistItem(models.Model):
                                    )
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    status = models.ForeignKey(Status, related_name="buckets")
+    status = models.ForeignKey(Status, related_name="statuses")
     
 
     def __unicode__(self):

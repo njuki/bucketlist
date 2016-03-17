@@ -14,7 +14,6 @@ from django.core.urlresolvers import reverse
 from blist_ui import factories
 
 
-
 class BucketListTestCase(APITestCase):
     """Tests the Bucket list API authentication, creating and listing."""
     
@@ -82,7 +81,8 @@ class BucketListTestCase(APITestCase):
         
     def test_update_delete_bucketlist(self):
         """
-        Tests that an authenticated user can update a existing bucketlist.
+        Tests that an authenticated user can update or delete an existing 
+        bucketlist.
         """
         
         credentials = {
@@ -124,4 +124,95 @@ class BucketListTestCase(APITestCase):
 
         # response should be a 204
         self.assertEqual(response.status_code, 204)
+
+
+class BucketListItemTestCase(APITestCase):
+    """Tests the Bucket list Items http actions of POST, PUT and DELETE."""
+    
+    def setUp(self):
+        self.bucketlist_url = reverse("bucket-list")
+        self.auth_url = reverse("token-auth")
+        self.user_factory = factories.UserFactory()
+        self.bucketlist_factory = factories.BucketlistFactory(
+                                              user=self.user_factory)
+        
+        self.status_factory = factories.StatusFactory()
+    
+    def test_add_bucketlist_item(self):
+        """
+        Tests that an authenticated user can add an item to an existing bucketlist.
+        """
+        
+        credentials = {
+                       "username": self.user_factory.username,
+                       "password": "default"
+        }
+        
+        response = self.client.post(self.auth_url, data=credentials)
+        auth_token = response.data['token']
+       
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + auth_token)
+        post_url = reverse("bucket-list") + str(self.bucketlist_factory.id) + "/items/"
+        item_payload = {
+                       "name": "Item 1",
+                       "description": "Item 1 Description",
+                       "bucketlist": self.bucketlist_factory.id,
+                       "status": self.status_factory.id
+        }
+        
+        # test post successful
+        response = self.client.post(post_url, data=item_payload)
+        self.assertEqual(response.status_code, 201)
+        
+        
+    
+    def test_update_delete_bucketlist_item(self):
+        """
+        Tests that an authenticated user can update or delete na existing
+        bucketlist item.
+        """
+        
+        credentials = {
+                       "username": self.user_factory.username,
+                       "password": "default"
+        }
+        
+        response = self.client.post(self.auth_url, data=credentials)
+        auth_token = response.data['token']
+       
+        self.client.credentials(HTTP_AUTHORIZATION="Token " + auth_token)
+        post_url = reverse("bucket-list") + str(self.bucketlist_factory.id) + "/items/"
+        item_payload = {
+                       "name": "Item 1",
+                       "description": "Item 1 Description",
+                       "bucketlist": self.bucketlist_factory.id,
+                       "status": self.status_factory.id
+        }
+        
+        response = self.client.post(post_url, data=item_payload)
+
+        update_url = post_url + str(response.data['id'])
+        
+        # Update the created bucketlist
+        update_payload =  {
+                       "name": "Item 1 Edited",
+                       "description": "Item 1 Description Edited",
+                       "bucketlist": self.bucketlist_factory.id,
+                       "status": self.status_factory.id
+        }
+        # Test update successful
+        response = self.client.put(update_url, data=update_payload)
+        
+        # response should be a 200
+        self.assertEqual(response.status_code, 200)
+        
+        # Now test delete
+        response = self.client.delete(update_url)
+
+        # response should be a 204
+        self.assertEqual(response.status_code, 204)
+        
+    
+    
+    
         

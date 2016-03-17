@@ -8,10 +8,11 @@ from rest_framework import status, authentication, permissions
 
 # Django core imports
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 # project specific imports
-from blist_ui.models import Bucketlist
-from .serializers import BucketListSerializer
+from blist_ui.models import Bucketlist, BucketlistItem
+from .serializers import BucketListSerializer, BucketlistItemSerializer
 from .pagination import PageLimit
 
 
@@ -38,7 +39,7 @@ class AuthenticationTokenView(GenericAPIView):
         return Response({'token': token[0].key, 'user_id': user.id})
     
 
-class BucketList(APIView):
+class BucketListView(APIView):
     """ Adds or Lists Buckectlists for a given user."""
     
     authentication_classes = (authentication.TokenAuthentication,)
@@ -62,7 +63,7 @@ class BucketList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class BucketListDetail(GenericAPIView):
+class BucketListDetailView(GenericAPIView):
     """Retrieves, updates or deletes a Bucketlist instance."""
     
     model = Bucketlist
@@ -70,10 +71,9 @@ class BucketListDetail(GenericAPIView):
     pagination_class = PageLimit
 
     def get_object(self, pk):
-        try:
-            return Bucketlist.objects.get(pk=pk)
-        except Bucketlist.DoesNotExist:
-            raise Http404
+        bucket_object = get_object_or_404(Bucketlist, pk=pk)
+        return bucket_object
+        
 
     def get(self, request, pk):
         """This gets a single bucket list."""
@@ -103,4 +103,58 @@ class BucketListDetail(GenericAPIView):
         bucketlist = self.get_object(pk)
 
         bucketlist.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class BucketListItemView(GenericAPIView):
+    """Adds an Item to a selected Buckectlist for a given user."""
+
+    serializer_class = BucketlistItemSerializer
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = PageLimit
+    
+
+    def post(self, request, id):
+
+        bucketlist = get_object_or_404(Bucketlist, pk=id)
+        
+        itemserializer = BucketlistItemSerializer(data=request.data)
+        bucketserializer = BucketListSerializer(bucketlist)
+        
+        if itemserializer.is_valid():
+            itemserializer.save()
+            return Response(bucketserializer.data,
+                            status=status.HTTP_201_CREATED)
+            
+        return Response(
+            itemserializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+        
+
+class ItemListDetailView(GenericAPIView):
+    """Deletes and Updates bucketlist item having the given id."""
+
+    serializer_class = BucketlistItemSerializer
+    pagination_class = PageLimit
+
+    def put(self, request, id, item_id):
+
+        get_object_or_404(Bucketlist, pk=id)
+        item = get_object_or_404(BucketlistItem, pk=id)
+
+        itemserializer = BucketlistItemSerializer(item, data=request.data)
+        if itemserializer.is_valid():
+            itemserializer.save()
+            return Response(itemserializer.data,
+                            status=status.HTTP_200_OK)
+            
+        return Response(itemserializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id, item_id):
+
+        item = get_object_or_404(BucketlistItem, pk=item_id)
+        item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
