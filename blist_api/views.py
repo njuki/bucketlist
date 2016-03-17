@@ -4,7 +4,7 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
+from rest_framework import status, authentication, permissions
 
 # project specific imports
 from blist_ui.models import Bucketlist
@@ -36,6 +36,9 @@ class AuthenticationTokenView(GenericAPIView):
 
 class BucketList(APIView):
     """ Adds or Lists Buckectlists for a given user."""
+    
+    authentication_classes = (authentication.TokenAuthentication,)
+    permission_classes = [permissions.IsAuthenticated]
     
     def get(self, request):
         """List all Buckets belonging to the logged in user."""

@@ -28,7 +28,7 @@ class BucketListTestCase(APITestCase):
 
         # should fail for non-logged in user
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
         response = self.client.post(self.url)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)

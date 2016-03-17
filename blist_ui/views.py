@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 
 # project specific imports
 from blist_ui.forms import *  # __all__
