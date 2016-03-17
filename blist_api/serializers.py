@@ -5,7 +5,7 @@ from blist_ui.models import Bucketlist
 class BucketListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bucketlist
-        fields = ('id', 'name', 'description', 'date_created', 'date_modified')
+        fields = ('id', 'name', 'user', 'description', 'date_created', 'date_modified')
 
     def __init__(self, *args, **kwargs):
         """
