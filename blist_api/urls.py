@@ -3,5 +3,5 @@ from blist_api import views as api_views
 
 urlpatterns = patterns(
    '',
-    url(r'^auth/login$', api_views.GetAuthenticationToken.as_view(), name='get-token'),
+    url(r'^auth/login$', api_views.AuthenticationTokenView.as_view(), name='get-token'),
 )

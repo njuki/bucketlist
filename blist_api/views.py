@@ -5,17 +5,24 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 
-# Create your views here.
-class GetAuthenticationToken(GenericAPIView):
+class AuthenticationTokenView(GenericAPIView):
     
-    """Get token on login."""
+    """Gets token from a post request. On receiving valid username and password, the class
+      attempts to fetch the token associated with that user. If not found a new
+      token is created.
+    """
     
     permission_classes = ()
     serializer_class = AuthTokenSerializer
 
     def post(self, request):
+        """
+          The post expects the payoload to contain a valid username and passoword.
+          The auth token associated with the user is return is json format.
+        """
+        
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         token = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key})
+        return Response({'token': token[0].key})
