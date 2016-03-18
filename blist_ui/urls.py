@@ -1,9 +1,10 @@
 from django.conf.urls import url
+from  django.contrib.auth import views
 from blist_ui import views as ui_views
 
 urlpatterns = [
     url(r'^login/', ui_views.LogInView.as_view(), name='login'),
-    url(r'^login/', 'django.contrib.auth.views.logout', name='logout'),
+    url(r'^login/', views.logout, name='logout'),
     url(r'^signup/', ui_views.SignUpView.as_view(), name='signup'),
     url(r'^home/', ui_views.IndexView.as_view(), name='home'),
     url(r'^bucketlist/create', ui_views.BucketlistCreate.as_view(),
