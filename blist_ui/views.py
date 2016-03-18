@@ -46,7 +46,6 @@ class LogInView(TemplateView):
             return HttpResponseRedirect(reverse('landing'))
 
 
-
 class SignUpView(TemplateView):
     """View defined for user signup."""
 
@@ -129,6 +128,7 @@ class BucketlistItemCreate(CreateView):
         form_class.instance.bucketlist = Bucketlist.objects.get(pk=self.kwargs['bid'])
         return super(BucketlistItemCreate, self).form_valid(form_class)
     
+
 class BucketlistItemUpdate(UpdateView):
     template_name = 'update.html'
     fields = ['name', 'description', 'status']
