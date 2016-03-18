@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from wheel.metadata import unique
 
 
 class Status(models.Model):
@@ -33,21 +34,27 @@ class Bucketlist((models.Model)):
     """
     name = models.CharField(
                             max_length=100,
-                            verbose_name="List Item Name" 
+                            unique=True,
+                            verbose_name="" 
                             )
     description = models.TextField(
                                    blank=True,
-                                   verbose_name="Description"
+                                   verbose_name=""
                                    )
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, related_name="users")
+    
+    
+    def get_list_items(self):
+        return BucketlistItem.objects.filter(bucketlist=self)
 
     def __unicode__(self):
         return "Bucketlist: %s user: %s" % (self.name, self.user)
 
     class Meta:
         ordering = ("-date_created",)
+    
 
 
 class BucketlistItem(models.Model):
@@ -56,7 +63,8 @@ class BucketlistItem(models.Model):
     """
     name = models.CharField(
                             max_length=100,
-                            verbose_name="List Item Name"
+                            verbose_name="List Item Name",
+                            unique=True
                             )
     description = models.TextField(
                                    blank=True,

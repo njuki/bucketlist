@@ -1,0 +1,46 @@
+{% extends "index.html" %}
+{% block content %}
+<div id="page_content_inner">
+			<div class="uk-width-medium-8-10 uk-container-center">
+				<div class="md-card md-card-single">
+					<div class="md-card-toolbar">
+						<div class="md-card-toolbar-actions">
+							<i class="md-icon material-icons">&#xE149;</i>
+						</div>
+						<h3 class="md-card-toolbar-heading-text large">Create Bucket List</h3>
+					</div>
+					<div class="md-card-content" id="todo_list">
+					<form action="" method="post">
+					{% csrf_token %}
+					{% if err %}
+					<div style="display: block; padding: 5px">
+						<div class="uk-notify-message uk-notify-message-danger" style="opacity: 1; margin-top: 0px; margin-bottom: 10px;">
+							<div>
+								Error! {{ err }}
+							</div>
+						</div>
+					</div>
+					
+					{% endif %}
+					{% for field in form %}
+					<div class="uk-grid">
+                        <div class="uk-width-medium-1-1 parsley-row">
+                        <div class="md-input-wrapper"><label for="wizard_fullname">{{ field.label_tag }}</label>
+                        {{ field }}
+                        <span class="md-input-bar"></span></div>
+                        </div>
+                        {% if field.errors %}
+                        <div class="parsley-errors-list filled" id="parsley-id-4"><span class="parsley-required">{{ field.errors }}</span></div>
+                        {% endif %}
+                       </div>
+                       {% endfor %}
+                       <div class="uk-width-medium-1-6 parsley-row" style="margin-top: 10px">
+                            <button class="md-btn md-btn-primary md-btn-wave-light waves-effect waves-button waves-light" href="components_buttons.html#">Create</button>
+                        </div>
+					</form>
+					
+					</div>
+				</div>
+			</div>
+		</div>
+	{% endblock %}

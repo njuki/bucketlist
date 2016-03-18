@@ -4,6 +4,9 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
+#local ppliction imports
+from blist_ui.models import Bucketlist
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(
@@ -29,6 +32,7 @@ class UserSignupForm(UserCreationForm):
     '''
     Field defined to override default field property.
     '''
+    
     email = forms.EmailField(required=True)
     full_name = forms.CharField(required=True)
 
@@ -36,6 +40,7 @@ class UserSignupForm(UserCreationForm):
         '''
         UserCreationform uses the django User object.
         '''
+        
         model = User
         fields = ('full_name', 'email', 'password1', 'password2')
     
@@ -43,6 +48,7 @@ class UserSignupForm(UserCreationForm):
         '''
         Save method used by the AbstractUser object.
         '''
+        
         full_name = self.cleaned_data['full_name'].split( )
         user = User.objects.create_user(
             first_name = full_name[0],
@@ -51,3 +57,23 @@ class UserSignupForm(UserCreationForm):
             email=self.cleaned_data['email'],
             password=self.cleaned_data['password1'])
         return user
+  
+    
+class BucketlistForm(forms.ModelForm):
+    '''Defines the form for Creating and updating a Bucketlist. '''
+    
+    name = forms.CharField(required=True,
+            widget = forms.TextInput(
+            attrs={'class': 'md-input md-input-danger', 'maxlength': '100'})
+                           )
+    description = forms.CharField(required=False,
+            widget = forms.TextInput(
+            attrs={'class': 'md-input', 'maxlength': '500'})
+        )
+    user = forms.CharField(required=False, widget=forms.HiddenInput())
+    
+    
+    class Meta:
+        model = Bucketlist
+        fields = ('name', 'description', 'user')
+    

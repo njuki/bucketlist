@@ -1,5 +1,7 @@
 # Core django imports
 from django.views.generic.base import TemplateView
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib import auth, messages
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
@@ -9,24 +11,21 @@ from django.template.context_processors import csrf
 
 # project specific imports
 from blist_ui.forms import *  # __all__
+from blist_ui.models import Bucketlist
+from blist_ui.forms.forms import BucketlistForm
 
 
 class LandingView(TemplateView):
     """
-    This is the default landing view, for guest users
+    This is the default landing view, for guest users.
     """
+    
     template_name = 'landing.html'
 
 
-class IndexView(TemplateView):
-    """
-    This is the default landing view, for logged in users
-    """
-    template_name = 'index.html'
-
-
 class LogInView(TemplateView):
-    '''This is the default landing view, for guest users'''
+    """ Login view."""
+    
     template_name = 'landing.html'
     
     def post(self, request, *args, **kwargs):
@@ -82,3 +81,42 @@ class SignUpView(TemplateView):
             args.update(csrf(request))
             messages.info(request, "Fix the following errors:" + str(usersignupform.errors))
             return render(request, self.template_name, args)
+        
+
+class IndexView(ListView):
+    """
+    This is the default landing view, for logged in users
+    """
+    template_name = 'partials/bucketlist.html'
+    model = Bucketlist
+    
+
+class BucketlistCreate(CreateView):
+    template_name = "create.html"
+    model = Bucketlist
+    form_class = BucketlistForm
+    success_url = '/home'
+    
+    def form_valid(self, form_class):
+        form_class.instance.user = self.request.user
+        return super(BucketlistCreate, self).form_valid(form_class)
+
+
+
+class BucketlistUpdate(UpdateView):
+    template_name = 'update.html'
+    fields = ['name', 'description']
+    model = Bucketlist
+    success_url = '/home'
+    
+    
+    
+
+class BucketlistDelete(DeleteView):
+    template_name = 'delete.html'
+    model = Bucketlist
+    
+    def get_success_url(self):
+        return reverse_lazy('home')
+
+        
