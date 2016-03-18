@@ -22,7 +22,7 @@ class LoginForm(forms.Form):
             user = auth.authenticate(username=username, password=password)
             if not user:
                 raise forms.ValidationError(
-                    "Wrong Username and/or Password. Please try again.ss" + str(password))
+                    "Wrong Username and/or Password. Please try again.")
             else:
                 self.user = user
         return cleaned_data
