@@ -48,8 +48,7 @@ class LogInView(TemplateView):
 
 
 class SignUpView(TemplateView):
-
-    '''View defined for user signup.'''
+    """View defined for user signup."""
 
     template_name = 'landing.html'
 
@@ -64,7 +63,8 @@ class SignUpView(TemplateView):
         if new_user_signup:
             args = {}
             args.update(csrf(request))
-            messages.info(request, "Email already taken please signup with another email.")
+            messages.info(request, 
+                    "Email already taken please signup with another email.")
             return render(request, self.template_name, args)
 
         # run if user doesn't exist
@@ -85,7 +85,7 @@ class SignUpView(TemplateView):
 
 class IndexView(ListView):
     """
-    This is the default landing view, for logged in users
+    This is the default landing view, for logged in users.
     """
     template_name = 'partials/bucketlist.html'
     model = Bucketlist
