@@ -10,6 +10,7 @@ The UI on the other hand is powered by Django generic views and templates from `
 The system runs on postgres database.
 
 # Installation
+0. `git clone git@github.com:njuki/bucketlist.git`
 1. Create a python virtual environment by running the command `mkvirtualenv blist`. This automatically activates the new environment.
 2. Install the dependancy packages by running `pip install -r requirements.txt`.
 3. Change the db configs appropriately in `configuration/settings.py`.
