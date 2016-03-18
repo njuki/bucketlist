@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 #local ppliction imports
-from blist_ui.models import Bucketlist
+from blist_ui.models import Bucketlist, BucketlistItem
 
 
 class LoginForm(forms.Form):
@@ -76,4 +76,21 @@ class BucketlistForm(forms.ModelForm):
     class Meta:
         model = Bucketlist
         fields = ('name', 'description', 'user')
+        
+
+class BucketlistItemForm(forms.ModelForm):
+    '''Defines the form for Creating and updating a BucketlistItem. '''
     
+    name = forms.CharField(required=True,
+            widget = forms.TextInput(
+            attrs={'class': 'md-input md-input-danger', 'maxlength': '100'})
+                           )
+    description = forms.CharField(required=False,
+            widget = forms.TextInput(
+            attrs={'class': 'md-input', 'maxlength': '500'})
+        )
+    
+    
+    class Meta:
+        model = BucketlistItem
+        fields = ('name', 'description')

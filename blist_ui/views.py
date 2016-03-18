@@ -11,7 +11,7 @@ from django.template.context_processors import csrf
 
 # project specific imports
 from blist_ui.forms import *  # __all__
-from blist_ui.models import Bucketlist
+from blist_ui.models import Bucketlist, BucketlistItem, Status
 from blist_ui.forms.forms import BucketlistForm
 
 
@@ -100,16 +100,13 @@ class BucketlistCreate(CreateView):
     def form_valid(self, form_class):
         form_class.instance.user = self.request.user
         return super(BucketlistCreate, self).form_valid(form_class)
-
-
+    
 
 class BucketlistUpdate(UpdateView):
     template_name = 'update.html'
     fields = ['name', 'description']
     model = Bucketlist
     success_url = '/home'
-    
-    
     
 
 class BucketlistDelete(DeleteView):
@@ -118,5 +115,31 @@ class BucketlistDelete(DeleteView):
     
     def get_success_url(self):
         return reverse_lazy('home')
+    
 
+class BucketlistItemCreate(CreateView):
+    template_name = "create.html"
+    model = BucketlistItem
+    form_class = BucketlistItemForm
+    success_url = '/home'
+    
+    def form_valid(self, form_class):
+        status = Status.objects.get(pk=1)
+        form_class.instance.status = status
+        form_class.instance.bucketlist = Bucketlist.objects.get(pk=self.kwargs['bid'])
+        return super(BucketlistItemCreate, self).form_valid(form_class)
+    
+class BucketlistItemUpdate(UpdateView):
+    template_name = 'update.html'
+    fields = ['name', 'description', 'status']
+    model = BucketlistItem
+    success_url = '/home'
+    
+
+class BucketlistItemDelete(DeleteView):
+    template_name = 'delete.html'
+    model = BucketlistItem
+    
+    def get_success_url(self):
+        return reverse_lazy('home')
         

@@ -22,11 +22,16 @@
 										<input type="checkbox" data-md-icheck />
 									</div>
 									<div class="md-list-content">
-										<a href="{% url 'bucketlist-delete' bucket_list.pk %}" class="md-list-action">
+										<a href="{% url 'bucketlist-delete' bucket_list.pk %}" class="md-list-action"
+										data-uk-tooltip title="Delete">
 										<i class="md-icon material-icons">&#xE872;</i></a>
 										
-										<a href="{% url 'bucketlist-edit' bucket_list.id %}" class="md-list-action">
+										<a href="{% url 'bucketlist-edit' bucket_list.id %}" class="md-list-action"
+										data-uk-tooltip title="Edit">
 										<i class="md-icon material-icons">&#xE150;</i></a>
+										<a href="{% url 'bucketlistitem-add' bid=bucket_list.id %}" class="md-list-action"
+										data-uk-tooltip title="Add Item to Bucket" >
+										<i class="md-icon material-icons">&#xE800;</i></a>
 										
 										 <span
 											class="md-list-heading"> {{ bucket_list.name }} </span>
@@ -44,7 +49,8 @@
                                                 <input type="checkbox" data-md-icheck checked />
                                             </div>
                                             <div class="md-list-content">
-                                                <a href="page_todo.html#" class="md-list-action"><i class="md-icon material-icons">&#xE872;</i></a>
+                                                <a href="{% url 'bucketlistitem-delete' item.pk %}" class="md-list-action"><i class="md-icon material-icons">&#xE872;</i></a>
+                                                <a href="{% url 'bucketlistitem-edit' item.pk %}" class="md-list-action"><i class="md-icon material-icons">&#xE150;</i></a>
                                                 <span class="md-list-heading">{{ item.name }}</span>
                                                 <span class="uk-text-small uk-text-muted">{{ item.description }}</span>
                                             </div>

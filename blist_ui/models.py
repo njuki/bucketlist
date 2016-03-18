@@ -25,7 +25,7 @@ class Status(models.Model):
     date_modified = models.DateTimeField(auto_now=True)
      
     def __unicode__(self):
-        return self.entity_state_name
+        return self.name
     
     
 class Bucketlist((models.Model)):
@@ -63,12 +63,12 @@ class BucketlistItem(models.Model):
     """
     name = models.CharField(
                             max_length=100,
-                            verbose_name="List Item Name",
+                            verbose_name="",
                             unique=True
                             )
     description = models.TextField(
                                    blank=True,
-                                   verbose_name="Description"
+                                   verbose_name=""
                                    )
     bucketlist = models.ForeignKey(
                                    Bucketlist,
