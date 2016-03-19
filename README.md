@@ -3,7 +3,7 @@ There are times things we want to do escape our memory. This Django and Django R
 
 #Tools used
 The API has been developed using django rest framework. Its detailed documentation has been done using django rest swagger and can be found here:
-http://52.88.3.173:8000/docs/
+http://162.243.123.198:8000/docs/
 
 The UI on the other hand is powered by Django generic views and templates from `django.views.generic`.
 
@@ -18,7 +18,7 @@ The system runs on postgres database.
 4. Access the web interface using your favorite browser by pasting the instance url on the browser's address bar.
 
 #Demo
-http://52.88.3.173:8000
+http://162.243.123.198:8000/
 username: admin
 password: !23qweASD
 
